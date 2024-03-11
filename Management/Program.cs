@@ -1,4 +1,7 @@
 
+using Management.Core.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace Management
 {
     public class Program
@@ -13,6 +16,8 @@ namespace Management
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<ApplicationDbContext>(options => 
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections")));
 
             var app = builder.Build();
 
