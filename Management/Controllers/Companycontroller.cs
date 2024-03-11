@@ -3,6 +3,7 @@ using Management.Core.Context;
 using Management.Core.Dtos.Company;
 using Management.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Management.Controllers
 {
@@ -18,10 +19,10 @@ namespace Management.Controllers
             _context = context;
             _mapper = mapper;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         //CRUD
 
@@ -37,6 +38,15 @@ namespace Management.Controllers
         }
 
         //Read
+        [HttpGet]
+        [Route("Get")]
+        public  async Task<ActionResult<IEnumerable<CompanyGetDto>>> GetCompanies()
+        {
+            var companies = await _context.Companies.ToListAsync();
+            var convertedCompanies = _mapper.Map<IEnumerable<CompanyGetDto>>(companies);
+
+            return Ok(convertedCompanies);
+        }
 
         //Update
 

@@ -2,6 +2,7 @@
 using Management.Core.AutoMapperConfig;
 using Management.Core.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace Management
 {
@@ -12,14 +13,19 @@ namespace Management
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddControllers();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections")));
+            builder.Services.AddAutoMapper(typeof(AutoMapperConfigProfile));
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(option =>
+                {
+                    option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections")));
-            builder.Services.AddAutoMapper(typeof(AutoMapperConfigProfile));
+            
 
             var app = builder.Build();
 
