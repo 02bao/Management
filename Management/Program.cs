@@ -1,4 +1,5 @@
 
+using Management.Core.AutoMapperConfig;
 using Management.Core.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ namespace Management
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections")));
+            builder.Services.AddAutoMapper(typeof(AutoMapperConfigProfile));
 
             var app = builder.Build();
 
