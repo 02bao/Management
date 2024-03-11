@@ -3,6 +3,7 @@ using Management.Core.Context;
 using Management.Core.Dtos.Job;
 using Management.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Management.Controllers
 {
@@ -29,6 +30,16 @@ namespace Management.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Job Created Successfully");
+        }
+
+        //Read
+        [HttpGet]
+        [Route("Get")]
+        public async Task<ActionResult<IEnumerable<JobGetDto>>> GetJobs()
+        {
+            var jobs = await _context.Jobs.Include(job => job.Company).ToListAsync();
+            var convertdJobs = _mapper.Map<IEnumerable<JobGetDto>>(jobs);
+            return Ok(convertdJobs);
         }
     }
 }
